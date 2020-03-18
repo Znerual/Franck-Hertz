@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29905.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{6989167D-11E4-40FE-8C1A-2192A86A7E90}") = "Franck-Hertz", "Franck-Hertz.vfproj", "{1BEFCC88-B973-46F6-9A42-1AAE7D62A89E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1BEFCC88-B973-46F6-9A42-1AAE7D62A89E}.Debug|x86.ActiveCfg = Debug|Win32
+		{1BEFCC88-B973-46F6-9A42-1AAE7D62A89E}.Debug|x86.Build.0 = Debug|Win32
+		{1BEFCC88-B973-46F6-9A42-1AAE7D62A89E}.Release|x86.ActiveCfg = Release|Win32
+		{1BEFCC88-B973-46F6-9A42-1AAE7D62A89E}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {68A1028A-4078-4397-A8D1-0C9FB707CB30}
+	EndGlobalSection
+EndGlobal
