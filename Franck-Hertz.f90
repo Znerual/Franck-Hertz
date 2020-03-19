@@ -32,20 +32,22 @@
     double precision :: p
     
     ! Variables
-    integer, parameter :: N_trajektorien = 1000, N_simulation = 20 !Anzahl der Trajektorien
-    double precision, parameter :: distanz_kg = 2d-2 !Abstand von Kathode zu Gitter
+    integer, parameter :: N_simulation = 20 !Anzahl der Simulierten Stoßmöglichkeiten
+    double precision, parameter :: U_step = 1d-2 !^-2!
+    double precision, parameter :: distanz_kg = 2d-1 !Abstand von Kathode zu Gitter
     double precision, parameter :: emfp = 7.1d-2 !emfp (Elastic mean free pathlength) = 1 / n * sigma (n= Dichte, Sigma = Stoßquerschnitt)
     double precision, parameter :: E_anregung = 4.9d0 !eV
-    double precision, parameter :: Ug = 1d0, Ub_max = 30d1, Ub_min = 0.5d0 !Volt, eV
-    double precision, parameter :: U_step = 1d-2
-    double precision, parameter :: c = 1.686d5 / distanz_kg
+    double precision, parameter :: Ug = 1d0, Ub_max = 8d1, Ub_min = 0.5d0 !Volt, eV 
+    double precision, parameter :: c = 3.7d-9 / distanz_kg**2 !4/9 e0 sqrt(2 q / me) *S /d^2    !S mit 4cm^2 angenommen (Anodenfläche)
     double precision, parameter :: simulations_breite = distanz_kg / N_simulation
-    double precision, parameter :: W = 4d0, Temp = 1.2d3, kB = 1.38064852d-23, Uh = 1d3 !Zur bestimmung der Exponentialverteilung der Startenergie
+    double precision, parameter :: W = 4d0, Temp = 5d4 , kB = 1.38064852d-23, beta = Temp * kb, Uh = 1d3,U_sat= 1d2, q_elem= 1.6d-19 !Zur bestimmung der Exponentialverteilung der Startenergie und Austrittselektronen, !Temp = in etwa Austrittstem
+    double precision, parameter :: Strom_faktor = 10d0
     double precision :: scaleX, scaleY, x,delta_x, fx !For creating the rectangle for the monte carlo simulation and the random guesses
     double precision :: E, Ub , Ia !Energie des Elektrons (eV), Beschleunigungsspannung, Gegenspannung, Katheodenspannung, Anodenstrom
     integer :: i,n=0,j, t
+    integer :: N_trajektorien = 1000 !Anzahl an austretenden Elektronen
     double precision :: dummy
-    double precision :: te !Temperatur, welche zufallsverteilt wird
+    double precision :: N_Verteilung !Variablen für Startenergieverteilung
    
     
     scaleX = distanz_kg
@@ -59,11 +61,13 @@
     dummy = rand(t)
     
     do Ub = Ub_min, Ub_max, U_step
+       
         do i = 0, N_trajektorien
-            
-            te = rand() * 100d0 + temp
-            E = exp(- Uh / (kB * te))
-            !E = 0
+            !Generieren der Exponentialverteilten Startenergie 
+            N_Verteilung = rand()
+            !E= (1d0 - exp(-1d0/N_Verteilung)) * ((kb*Temp)/q_elem - W)
+            E = 0
+            !print* ,"E: ", E
             do j = 0,N_simulation
                 delta_x = rand() * simulations_breite
                 x = delta_x + j * simulations_breite 
@@ -75,8 +79,12 @@
             if (E >= 0) n = n + 1!Teilchen ist an der Anode angekommen
             !print*, "Teilchen simuliert bei x: " , x ," f(x): ", fx, " mit Energie " , (Ub-Ug), " hat jetzt Energie ", E
         end do
-        !Ia = dble(n) / dble(N_trajektorien) * scaleX * scaleY
-        Ia = c * sqrt(Ub) * n/N_trajektorien
+        if (Ub > U_sat) then
+            Ia = c * sqrt(Ub)**(3)  * n /N_trajektorien
+            print*,"Über der Sättigungsspannung!"
+        else 
+            Ia = c * sqrt(Ub)** 3 * n /N_trajektorien
+        end if
         n = 0
         write(1,*) Ub, Ia 
     end do
