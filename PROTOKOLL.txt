@@ -1,0 +1,13 @@
+Protokoll vom 17.3.2020
+Gruppennr: 5
+Name: Marina Bishara und Laurenz Ruzicka
+
+Frank-Hertz Versuch
+Dauer: 9h
+
+Probleme: 
+Interpretation der Monte Carlo Simulation
+Variable Trajektorienzahlen?
+Spannungen überhalb der Sättigungsspannung
+
+Bitte um Feedback
